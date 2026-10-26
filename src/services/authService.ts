@@ -1,9 +1,9 @@
-import api from "../../services/api";
+import api from "./api";
 
 import type {
     LoginRequest,
     RegisterRequest
-} from "./auth.types";
+} from "../types/auth.types";
 
 
 export async function login(
