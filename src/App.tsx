@@ -1,29 +1,43 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { AppLayout } from './components/AppLayout';
-import { NotFound } from './pages/NotFound';
-import { Dashboard } from './pages/Dashboard';
-import Login from './pages/Login';
-import Register from './pages/Register'; // Importación correcta sin llaves
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AppLayout } from "./components/AppLayout";
+
+import { Dashboard } from "./pages/Dashboard";
+import { NotFound } from "./pages/NotFound";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+import WantedPage from "./features/wanted/WantedPage";
+import WantedDetailPage from "./features/wanted/WantedDetailPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas Públicas */}
+        {/* Rutas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
-        {/* Rutas Privadas (Requieren token) */}
+
+        {/* Rutas protegidas */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/wanted" element={<div className="text-white">Se Busca (CP2)</div>} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+            {/* Checkpoint 2 - Wanted */}
+            <Route path="/wanted" element={<WantedPage />} />
+            <Route path="/wanted/:id" element={<WantedDetailPage />} />
           </Route>
         </Route>
 
-        {/* Ruta 404 */}
+        {/* Redirección inicial */}
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
+        {/* Página no encontrada */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
