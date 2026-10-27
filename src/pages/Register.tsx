@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { isAxiosError } from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 
