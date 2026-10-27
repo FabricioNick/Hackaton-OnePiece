@@ -1,6 +1,7 @@
 import {
     createContext,
     useEffect,
+    useCallback,
     useState,
     type ReactNode
 } from "react";
@@ -17,7 +18,10 @@ import type {
     RegisterRequest
 } from "../types/auth.types";
 
-import { AUTH_TOKEN_KEY } from "../constants/auth";
+import {
+    AUTH_TOKEN_KEY,
+    AUTH_SESSION_EXPIRED_EVENT
+} from "../constants/auth";
 
 
 export interface AuthContextValue {
@@ -69,11 +73,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
         useState<AuthStatus>("checking");
 
 
-    function logout() {
+    const logout = useCallback(() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setUser(null);
         setStatus("unauthenticated");
-    }
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener(
+            AUTH_SESSION_EXPIRED_EVENT,
+            logout
+        );
+
+        return () => {
+            window.removeEventListener(
+                AUTH_SESSION_EXPIRED_EVENT,
+                logout
+            );
+        };
+    }, [logout]);
 
 
     async function startSession(token: string) {
