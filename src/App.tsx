@@ -1,30 +1,44 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { AppLayout } from './components/AppLayout';
-import { NotFound } from './pages/NotFound';
-import { Dashboard } from './pages/Dashboard';
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AppLayout } from "./components/AppLayout";
+
+import { Dashboard } from "./pages/Dashboard";
+import { NotFound } from "./pages/NotFound";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+import WantedPage from "./features/wanted/WantedPage";
+import WantedDetailPage from "./features/wanted/WantedDetailPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas Públicas (El login va aquí) */}
-        <Route path="/login" element={<div className="p-10 text-white">Login en construcción...</div>} />
-        
-        {/* Rutas Privadas (Requieren token) */}
+        {/* Rutas públicas */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Rutas protegidas */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            {/* Renderizamos tu componente inteligente aquí */}
             <Route path="/dashboard" element={<Dashboard />} />
-            
-            {/* Espacio reservado para el CP2 */}
-            <Route path="/wanted" element={<div className="text-white">Se Busca (CP2 en construcción...)</div>} />
-            
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+            {/* Checkpoint 2 - Wanted */}
+            <Route path="/wanted" element={<WantedPage />} />
+            <Route path="/wanted/:id" element={<WantedDetailPage />} />
           </Route>
         </Route>
 
-        {/* Ruta 404 */}
+        {/* Redirección inicial */}
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
+        {/* Página no encontrada */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
